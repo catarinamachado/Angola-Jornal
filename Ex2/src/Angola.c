@@ -13,35 +13,50 @@ typedef struct angola {
     GString * text;
 } *Angola;
 
-void addlink(GString * tag, GString * title ){
+typedef struct tuple {
+    GString * id;
+    GString * title;
+} *Tuple;
+
+Tuple mkTuple(GString * id, GString * title){
+    Tuple t = (Tuple)malloc(sizeof(struct tuple));
+    t->id = g_string_new(id->str);
+    t->title = g_string_new(title->str);
+    return t;
+}
+
+void unmkTuple( Tuple t ){
+   g_string_free(t->id, TRUE);
+   g_string_free(t->title, TRUE);
+   g_free(t);
+}
+
+void stringTotalFree( GString * str){
+    g_string_free(str, TRUE);
+}
+
+void addlink(GString * tag, GString* id,GString * title ){
     
     GString *a, *b;
-    GSList *l,*tmp;
+    GHashTable *l,*tmp;
+    Tuple t;
 
     if( g_hash_table_contains(taghtable,tag) ){
-        l = (GSList *)g_hash_table_lookup(taghtable,tag);
-        b = g_string_new(title->str);
-        l = g_slist_prepend(l,b);
+        l = (GHashTable *)g_hash_table_lookup(taghtable,tag);
+        t = mkTuple(id,title);
+        g_hash_table_insert(l,t->id,t);
+
         g_hash_table_steal_extended(taghtable,tag, &a, &tmp);
         g_hash_table_insert(taghtable,a,l);
     }else{
-        l = NULL;
+        l = g_hash_table_new_full(g_string_hash,g_string_equal,NULL,unmkTuple);
         a = g_string_new(tag->str);
-        b = g_string_new(title->str);
-        l = g_slist_append(l,b);
+        t = mkTuple(id,title);
+        g_hash_table_insert(l,t->id,t);
         g_hash_table_insert(taghtable,a,l);
     }
     
 }
-
-void stringTotalFree(GString* s) { 
-    g_string_free(s, TRUE);
-}
-
-void listTotalFree(GSList * list){
-    g_slist_free_full(list, stringTotalFree);
-}
-
 
 Angola mkAngola(){
     Angola a = (Angola)g_malloc( sizeof( struct angola));
@@ -77,7 +92,7 @@ void unmkAngola(Angola a){
     printf("\t<tags>\n\t\t");
     for (l = a->tags; l != NULL; l = l->next)
     {
-        addlink(l->data,a->title);
+        addlink(l->data,a->id,a->title);
         tmp = g_string_free(l->data,FALSE);
         printf("<tag>%s</tag> ",tmp);
         g_free(tmp);
@@ -127,22 +142,37 @@ void addText(Angola a, char* str){
 
 void tag(){
     
-    taghtable = g_hash_table_new_full(g_string_hash, g_string_equal, stringTotalFree, listTotalFree);
+    taghtable = g_hash_table_new_full(g_string_hash, g_string_equal, stringTotalFree, g_hash_table_destroy );
 
 }
 
 void f(gpointer key, gpointer value, gpointer user_data){
     GString* s = (GString*)key;
-    GSList* l = (GSList*)value;
-    printf(":| %s :> %d \n",s->str,(int)g_slist_length(l));
+    GList* l = g_hash_table_get_values((GHashTable*)value);
+    GList* cur;
+    Tuple tmp;
+    printf("<pub id=\"tag-%s\">\n",s->str);
+    printf("\t<h1>%d</h1>\n",(int)g_list_length(l));
+    for(cur = l; cur; cur = cur->next){
+        tmp = (Tuple)cur->data;
+        printf("\t\t<a href=\"%s.html\">%s</a>\n",tmp->id->str,tmp->title->str);
+    }
+    printf("</pub>\n");
+}
 
+void fm(gpointer key, gpointer value, gpointer user_data){
+    GString* s = (GString*)key;
+
+    printf("\t\t<a href=\"%s.html\">%s</a>\n",s->str,s->str);
 }
 
 
 void trace(){
     
-    // print
-    
+    printf("<pub id=\"type-tags\">\n");
+    g_hash_table_foreach(taghtable,fm,NULL);
+    printf("</pub>\n");
+
     g_hash_table_foreach(taghtable,f,NULL);
     
     g_hash_table_destroy(taghtable);
