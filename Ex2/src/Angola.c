@@ -179,7 +179,7 @@ void fm(gpointer key, gpointer value, gpointer user_data){
         if( *ptr == ' ' )
             *ptr = '-';
 
-    printf("\t\t<a href=\"%s.html\">%s</a>\n",buffer,buffer);
+    printf("\t\t<a href=\"%s.html\">%s</a>\n",buffer,s->str);
 }
 
 
