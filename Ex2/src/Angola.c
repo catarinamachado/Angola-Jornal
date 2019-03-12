@@ -151,10 +151,19 @@ void f(gpointer key, gpointer value, gpointer user_data){
     GList* l = g_hash_table_get_values((GHashTable*)value);
     GList* cur;
     Tuple tmp;
-    printf("<pub id=\"tag-%s\">\n",s->str);
+    char buffer[2000];
+    char *ptr;
+
+    strcpy(buffer,s->str);
+    for(ptr = buffer;*ptr != '\0'; ptr++ )
+        if( *ptr == ' ' )
+            *ptr = '-';
+
+    printf("<pub id=\"%s\">\n",buffer);
     printf("\t<h1>%d</h1>\n",(int)g_list_length(l));
     for(cur = l; cur; cur = cur->next){
         tmp = (Tuple)cur->data;
+
         printf("\t\t<a href=\"%s.html\">%s</a>\n",tmp->id->str,tmp->title->str);
     }
     printf("</pub>\n");
@@ -162,14 +171,21 @@ void f(gpointer key, gpointer value, gpointer user_data){
 
 void fm(gpointer key, gpointer value, gpointer user_data){
     GString* s = (GString*)key;
+    char buffer[2000];
+    char *ptr;
 
-    printf("\t\t<a href=\"%s.html\">%s</a>\n",s->str,s->str);
+    strcpy(buffer,s->str);
+    for(ptr = buffer;*ptr != '\0'; ptr++ )
+        if( *ptr == ' ' )
+            *ptr = '-';
+
+    printf("\t\t<a href=\"%s.html\">%s</a>\n",buffer,buffer);
 }
 
 
 void trace(){
     
-    printf("<pub id=\"type-tags\">\n");
+    printf("<pub id=\"tags\">\n");
     g_hash_table_foreach(taghtable,fm,NULL);
     printf("</pub>\n");
 
