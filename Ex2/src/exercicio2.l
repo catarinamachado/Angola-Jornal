@@ -21,7 +21,7 @@ tag:\{              {tbuffer = g_string_new("");BEGIN TAG;}
 <TAG>\}             {tmp = g_string_free(tbuffer,FALSE);addTag(a,tmp); g_free(tmp); BEGIN INITIAL;}
 <TAG>.              {g_string_append_c(tbuffer,yytext[0]);}
 
-\#ID                {tbuffer = g_string_new("post\-");BEGIN IDT;}
+\#ID                {tbuffer = g_string_new("post-");BEGIN IDT;}
 <IDT>{dig}+         {g_string_append(tbuffer,yytext);}
 <IDT>\}\n           {tmp = g_string_free(tbuffer,FALSE); addId(a,tmp); g_free(tmp); BEGIN CATEGORY;tbuffer = g_string_new("");}
 
@@ -53,6 +53,8 @@ int yywrap(){
 }
 
 int main(){
+    START_TAGGING;
     yylex();
+    STOP_TAGGING;
     return 0;
 }

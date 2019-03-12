@@ -827,7 +827,7 @@ YY_RULE_SETUP
 case 8:
 YY_RULE_SETUP
 #line 24 "exercicio2.l"
-{tbuffer = g_string_new("post\-");BEGIN IDT;}
+{tbuffer = g_string_new("post-");BEGIN IDT;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
@@ -1933,7 +1933,9 @@ int yywrap(){
 }
 
 int main(){
+    START_TAGGING;
     yylex();
+    STOP_TAGGING;
     return 0;
 }
 

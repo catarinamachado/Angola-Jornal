@@ -2,6 +2,8 @@
 #include <glib.h>
 #include <stdio.h>
 
+GHashTable * taghtable;
+
 typedef struct angola {
     GString * id;
     GString * author;
@@ -10,6 +12,36 @@ typedef struct angola {
     GString * category;
     GString * text;
 } *Angola;
+
+void addlink(GString * tag, GString * title ){
+    
+    GString *a, *b;
+    GSList *l,*tmp;
+
+    if( g_hash_table_contains(taghtable,tag) ){
+        l = (GSList *)g_hash_table_lookup(taghtable,tag);
+        b = g_string_new(title->str);
+        l = g_slist_prepend(l,b);
+        g_hash_table_steal_extended(taghtable,tag, &a, &tmp);
+        g_hash_table_insert(taghtable,a,l);
+    }else{
+        l = NULL;
+        a = g_string_new(tag->str);
+        b = g_string_new(title->str);
+        l = g_slist_append(l,b);
+        g_hash_table_insert(taghtable,a,l);
+    }
+    
+}
+
+void stringTotalFree(GString* s) { 
+    g_string_free(s, TRUE);
+}
+
+void listTotalFree(GSList * list){
+    g_slist_free_full(list, stringTotalFree);
+}
+
 
 Angola mkAngola(){
     Angola a = (Angola)g_malloc( sizeof( struct angola));
@@ -26,11 +58,11 @@ Angola mkAngola(){
 void unmkAngola(Angola a){
     GList *l;
     char * tmp;
-    char * id = g_string_free(a->id,FALSE);
-    char * author = g_string_free(a->author,FALSE);
-    char * title = g_string_free(a->title,FALSE);
-    char * category = g_string_free(a->category,FALSE);
-    char * text = g_string_free(a->text,FALSE);
+    char * id = a->id->str;
+    char * author = a->author->str;
+    char * title = a->title->str;
+    char * category = a->category->str;
+    char * text = a->text->str; 
 
     printf("<pub id=\"%s\">\n",id);
 
@@ -45,6 +77,7 @@ void unmkAngola(Angola a){
     printf("\t<tags>\n\t\t");
     for (l = a->tags; l != NULL; l = l->next)
     {
+        addlink(l->data,a->title);
         tmp = g_string_free(l->data,FALSE);
         printf("<tag>%s</tag> ",tmp);
         g_free(tmp);
@@ -59,11 +92,11 @@ void unmkAngola(Angola a){
 
     printf("</pub>\n");
 
-    g_free(id);
-    g_free(author);
-    g_free(title);
-    g_free(category);
-    g_free(text);
+    g_string_free(a->id,TRUE);
+    g_string_free(a->author,TRUE);
+    g_string_free(a->title,TRUE);
+    g_string_free(a->category,TRUE);
+    g_string_free(a->text,TRUE);
     g_list_free(a->tags);
     g_free(a);
 }
@@ -90,4 +123,28 @@ void addCategory(Angola a, char* str){
 
 void addText(Angola a, char* str){
     g_string_append(a->text,str);
+}
+
+void tag(){
+    
+    taghtable = g_hash_table_new_full(g_string_hash, g_string_equal, stringTotalFree, listTotalFree);
+
+}
+
+void f(gpointer key, gpointer value, gpointer user_data){
+    GString* s = (GString*)key;
+    GSList* l = (GSList*)value;
+    printf(":| %s :> %d \n",s->str,(int)g_slist_length(l));
+
+}
+
+
+void trace(){
+    
+    // print
+    
+    g_hash_table_foreach(taghtable,f,NULL);
+    
+    g_hash_table_destroy(taghtable);
+    
 }
