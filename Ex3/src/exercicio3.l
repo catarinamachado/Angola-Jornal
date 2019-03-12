@@ -1,19 +1,20 @@
 
 %{
 #include <stdio.h>
+#include <glib.h>
 #include <MultiSet.h>
 
-char tbuffer[4000];
-int p = 0;
+GString * tbuffer;
 MultiSet mset;
+char* tmp;
 %}
 
 %x TAG
 
 %%
-tag:\{          {BEGIN TAG;}
-<TAG>\}         {tbuffer[p] = '\0'; add(mset,tbuffer); p=0; BEGIN INITIAL;}
-<TAG>.          {tbuffer[p] = yytext[0]; p++;}
+tag:\{          {tbuffer = g_string_new("");BEGIN TAG;}
+<TAG>\}         {tmp = g_string_free(tbuffer,FALSE); add(mset,tmp); g_free(tmp); BEGIN INITIAL;}
+<TAG>.          {g_string_append_c(tbuffer,yytext[0]);}
 <*>.|\n         {}
 %%
 
@@ -27,9 +28,7 @@ size_t stringsize( Value str){
 
 int main(){
     mset = new(stringsize, g_free);
-    printf(">>filtragem vai ser iniciada\n");
     yylex();
-    printf(">>filtragem terminou\n");
     show(mset);
     destroy(mset);
     return 0;

@@ -19,6 +19,13 @@ Tuple mkTuple(Value v){
     return t;
 }
 
+int tuplecmp( gpointer a1 ,gpointer a2){
+    Tuple b1 = (Tuple)a1;
+    Tuple b2 = (Tuple)a2;
+
+    return b1->n >= b2->n;
+}
+
 void unmkTuple(Tuple t){
     g_free(t);
 }
@@ -54,15 +61,16 @@ MultiSet add(MultiSet set,Value element){
 }
 
 void show(MultiSet set){
-    GHashTableIter iter;
-    gpointer key;
-    Tuple value;
+    //GHashTableIter iter;
+    Tuple t;
+    GList *cur;
+    GList *l = g_hash_table_get_values(set->htable);
+    l = g_list_sort(l,tuplecmp);
 
-    g_hash_table_iter_init (&iter, set->htable );
-    while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-        printf(" %s :|> %ld \n",value->value, value->n);
-    }
+    for(cur = l; cur ; cur = cur->next)
+        t = (Tuple)cur->data;
+        printf(" %s - %ld \n",t->value, t->n);
+
 }
 
 long count(MultiSet set, Value element){
