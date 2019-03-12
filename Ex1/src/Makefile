@@ -19,7 +19,7 @@ $(ODIR)/%.o : %.c $(DEPS)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 program: $(SOURCES_OBJ) $(MY_LIBS_OBJ)
-	$(CC) $(CFLAGS) $(wildcard $(ODIR)/*.o)  $(wildcard $(OLDIR)/*.o) -o program $(LIBS)
+	$(CC) $(CFLAGS) $(wildcard $(ODIR)/*.o)  $(wildcard $(OLDIR)/*.o) -o slicer $(LIBS)
 
 clean:
 	rm obj/*.o

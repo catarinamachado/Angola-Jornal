@@ -146,7 +146,7 @@ void tag(){
 
 }
 
-void f(gpointer key, gpointer value, gpointer user_data){
+void title_index_function(gpointer key, gpointer value, gpointer user_data){
     GString* s = (GString*)key;
     GList* l = g_hash_table_get_values((GHashTable*)value);
     GList* cur;
@@ -169,7 +169,7 @@ void f(gpointer key, gpointer value, gpointer user_data){
     printf("</pub>\n");
 }
 
-void fm(gpointer key, gpointer value, gpointer user_data){
+void tag_index_function(gpointer key, gpointer value, gpointer user_data){
     GString* s = (GString*)key;
     char buffer[2000];
     char *ptr;
@@ -186,10 +186,10 @@ void fm(gpointer key, gpointer value, gpointer user_data){
 void trace(){
     
     printf("<pub id=\"tags\">\n");
-    g_hash_table_foreach(taghtable,fm,NULL);
+    g_hash_table_foreach(taghtable,tag_index_function,NULL);
     printf("</pub>\n");
 
-    g_hash_table_foreach(taghtable,f,NULL);
+    g_hash_table_foreach(taghtable,title_index_function,NULL);
     
     g_hash_table_destroy(taghtable);
     

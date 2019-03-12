@@ -3,11 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-char buffer[2000];
-char dir[2000];
-char *t;
+char buffer[500];
+char dir[500];
 FILE* fdes;
-int id;
+
 
 %}
 
@@ -16,15 +15,19 @@ dig [0-9]
 %x COPY NAME
 
 %%
-
-"<pub id=\""                            {BEGIN NAME;buffer[0] ='\0';}                
-<NAME>\">                               {strcat(buffer,".html"); sprintf(dir,"out/%s",buffer); fdes = fopen(dir,"w"); fprintf(fdes,"<html>\n"); BEGIN COPY;}
-<NAME>" "                               {strcat(buffer,"-");}
+"<pub id=\""                            {buffer[0]=dir[0]='\0';
+                                         BEGIN NAME;}                
+<NAME>\">                               {strcat(buffer,".html");
+                                         sprintf(dir,"out/%s",buffer);
+                                         fdes = fopen(dir,"w"); 
+                                         fprintf(fdes,"<html>\n"); 
+                                         BEGIN COPY;}
 <NAME>.                                 {strcat(buffer,yytext);}
-<COPY>"</pub>"                          {fprintf(fdes,"</html>");fclose(fdes); BEGIN INITIAL;}
-<COPY>.|\n                              {fprintf(fdes,"%s",yytext);}
+<COPY>"</pub>"                          {fprintf(fdes,"</html>");
+                                         fclose(fdes);
+                                         BEGIN INITIAL;}
+<COPY>.|\n                              {putc(yytext[0] ,fdes);}
 <*>.|\n                                 {}
-
 %%
 
 int yywrap(){
@@ -32,7 +35,6 @@ int yywrap(){
 }
 
 int main(){
-    buffer[0]=dir[0]='\0';
     yylex();
     return 0;
 }
