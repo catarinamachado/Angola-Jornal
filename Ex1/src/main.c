@@ -466,14 +466,18 @@ char *yytext;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 char buffer[500];
 char dir[500];
+char dirout[500];
 FILE* fdes;
 
 
 
-#line 477 "main.c"
+#line 481 "main.c"
 
 #define INITIAL 0
 #define COPY 1
@@ -657,9 +661,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 17 "glue.l"
+#line 21 "glue.l"
 
-#line 663 "main.c"
+#line 667 "main.c"
 
 	if ( !(yy_init) )
 		{
@@ -744,27 +748,27 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 18 "glue.l"
+#line 22 "glue.l"
 {buffer[0]=dir[0]='\0';
                                          BEGIN NAME;}                
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 20 "glue.l"
+#line 24 "glue.l"
 {strcat(buffer,".html");
-                                         sprintf(dir,"out/%s",buffer);
+                                         sprintf(dir,"%s%s",dirout,buffer);
                                          fdes = fopen(dir,"w"); 
                                          fprintf(fdes,"<html>\n"); 
                                          BEGIN COPY;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 25 "glue.l"
+#line 29 "glue.l"
 {strcat(buffer,yytext);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 26 "glue.l"
+#line 30 "glue.l"
 {fprintf(fdes,"</html>");
                                          fclose(fdes);
                                          BEGIN INITIAL;}
@@ -772,21 +776,21 @@ YY_RULE_SETUP
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 29 "glue.l"
+#line 33 "glue.l"
 {putc(yytext[0] ,fdes);}
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 30 "glue.l"
+#line 34 "glue.l"
 {}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 31 "glue.l"
+#line 35 "glue.l"
 ECHO;
 	YY_BREAK
-#line 790 "main.c"
+#line 794 "main.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COPY):
 case YY_STATE_EOF(NAME):
@@ -1785,7 +1789,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 31 "glue.l"
+#line 35 "glue.l"
 
 
 
@@ -1793,7 +1797,22 @@ int yywrap(){
     return 1;
 }
 
-int main(){
+int main(int argc, char *argv[]){
+    struct stat st = {0};
+    if(argc > 1){
+        strcpy(dirout,argv[1]);
+        strcat(dirout,"/");
+        if (stat("/some/directory", &st) == -1) {
+            mkdir(dirout, 0777);
+    }
+    }else{
+        strcpy(dirout,"");
+    }
     yylex();
     return 0;
 }
+
+
+
+
+
