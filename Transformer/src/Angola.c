@@ -93,39 +93,39 @@ void printHTML(Angola a){
 
     if (strstr(title, "---------"))
     {
-        printf("<title></title>\n");
+        printf("\t<title></title>\n");
     }
     else
     {
-        printf("<title>%s</title>\n", title);
+        printf("\t<title>%s</title>\n", title);
     }
 
     printf("</head>\n");
     printf("<body>\n");
 
-    printf("<h1><p align='center'><font color='#2874A6'>%s</font></p></h1>\n", title);
+    printf("\t<h1><p align='center'><font color='#2874A6'>%s</font></p></h1>\n", title);
 
-    printf("<div style='padding: 20px'>\n");
-    printf("<author_date><h3><font color='#85C1E9'>%s</font></h3></author_date>\n", author);
+    printf("\t<div style='padding: 20px'>\n");
+    printf("\t<author_date><h3><font color='#85C1E9'>%s</font></h3></author_date>\n", author);
 
-    printf("<p><tags><b>Tags:</b> \n");
+    printf("\t<p><tags><b>Tags:</b> \n");
     for (l = a->tags; l != NULL; l = l->next)
     {
         addlink(l->data, a->id, a->title);
         tmp = g_string_free(l->data, FALSE);
-        printf("<tag>#%s</tag> \n", tmp);
+        printf("\t<tag>#%s</tag>", tmp);
         g_free(tmp);
     }
-    printf("</tags></p>\n");
+    printf("\t</tags></p>\n");
 
-    printf("<p><category><b>Categoria:</b> %s</category></p>\n", category);
+    printf("\t<p><category><b>Categoria:</b> %s</category></p>\n", category);
 
-    printf("</div>\n");
+    printf("\t</div>\n");
 
-    printf("<text>\n");
+    printf("\t<text>\n");
 
-    printf("<div style='float: left; width: 50%%;'>\n");
-    printf("<div style='padding: 20px'>\n");
+    printf("\t<div style='float: left; width: 50%%;'>\n");
+    printf("\t<div style='padding: 20px'>\n");
     guint length = g_list_length(a->lines);
     int i = 0;
 
@@ -136,21 +136,21 @@ void printHTML(Angola a){
 
         if (i == length / 2)
         {
-            printf("</div>");
-            printf("</div>\n");
+            printf("\t</div>");
+            printf("\t</div>\n");
 
-            printf("<div style='float: left; width: 49%%;'>\n");
-            printf("<div style='padding: 20px'>\n");
+            printf("\t<div style='float: left; width: 49%%;'>\n");
+            printf("\t<div style='padding: 20px'>\n");
         }
 
         g_free(tmp);
         i++;
     }
 
-    printf("</div>");
-    printf("</div>\n");
+    printf("\t</div>");
+    printf("\t</div>\n");
 
-    printf("</text>\n");
+    printf("\t</text>\n");
 
     printf("</body>\n");
 
@@ -201,24 +201,24 @@ void title_index_function(gpointer key, gpointer value, gpointer user_data){
     printf("<pub id=\"%s\">\n", buffer);
 
     printf("<head>\n");
-    printf("<title>%s</title>\n", buffer);
+    printf("\t<title>%s</title>\n", buffer);
     printf("</head>\n");
 
     printf("<body>\n");
 
-    printf("<h1><p align='center'><font color='#2874A6'>%s</font></p></h1>\n", buffer);
+    printf("\t<h1><p align='center'><font color='#2874A6'>%s</font></p></h1>\n", buffer);
 
-    printf("<h2>Número de ocorrências: <font color='#2874A6'>%d</font></h2>\n", (int)g_list_length(l));
+    printf("\t<h2>Número de ocorrências: <font color='#2874A6'>%d</font></h2>\n", (int)g_list_length(l));
 
-    printf("<ul>");
+    printf("<ul>\n");
 
     for(cur = l; cur; cur = cur->next){
         tmp = (Tuple)cur->data;
 
-        printf("\t\t<li><a href=\"%s.html\">%s</a></li>\n",tmp->id->str,tmp->title->str);
+        printf("\t<li><a href=\"%s.html\">%s</a></li>\n",tmp->id->str,tmp->title->str);
     }
 
-    printf("</ul>");
+    printf("</ul>\n");
 
     printf("</body>\n");
     printf("</pub>\n");
@@ -232,14 +232,14 @@ void printTagsHTML(){
     printf("<pub id=\"tags\">\n");
 
     printf("<head>\n");
-    printf("<title>Tags</title>\n");
+    printf("\t<title>Tags</title>\n");
     printf("</head>\n");
 
     printf("<body>\n");
-    printf("<h1><p align='center'><font color='#2874A6'>Tags</font></p></h1>\n");
+    printf("\t<h1><p align='center'><font color='#2874A6'>Tags</font></p></h1>\n");
 
-    printf("<div style='float: left; width: 33%%;'>\n");
-    printf("<ul>\n");
+    printf("\t<div style='float: left; width: 33%%;'>\n");
+    printf("\t<ul>\n");
 
     guint length = g_hash_table_size(taghtable);
     int i = 0;
