@@ -208,8 +208,7 @@ void title_index_function(gpointer key, gpointer value, gpointer user_data){
     printf("</pub>\n");
 }
 
-
-void trace(){
+void printTagsHTML(){
     printf("<pub id=\"tags\">\n");
     printf("<head>\n");
     printf("<title>Tags</title>\n");
@@ -229,14 +228,17 @@ void trace(){
     gpointer key, value;
 
     g_hash_table_iter_init(&iter, taghtable);
-    while (g_hash_table_iter_next(&iter, &key, &value)){
-        if(i == length/3){
+    while (g_hash_table_iter_next(&iter, &key, &value))
+    {
+        if (i == length / 3)
+        {
             printf("</ul>");
             printf("</div>");
             printf("<div style='float: left; width: 33%%;'>");
             printf("<ul>");
         }
-        if (i == ((2*length)/3)){
+        if (i == ((2 * length) / 3))
+        {
             printf("</ul>");
             printf("</div>");
             printf("<div style='float: right; width: 33%%;'>");
@@ -263,13 +265,12 @@ void trace(){
 
     printf("</body>\n");
     printf("</pub>\n");
+}
 
+void trace(){
+    printTagsHTML();
 
-
-
-
-//
-    g_hash_table_foreach(taghtable,title_index_function,NULL);
+    g_hash_table_foreach(taghtable, title_index_function, NULL);
 
     g_hash_table_destroy(taghtable);
 }
