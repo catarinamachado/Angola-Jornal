@@ -1,27 +1,13 @@
-IDIR=../include
-ODIR=obj
-LDIR=lib
-OLDIR=$(ODIR)/lib
+EXEC := transformer
 
-CC=gcc
-CFLAGS = -Wall -std=c11 -g -Ofast `pkg-config --cflags glib-2.0` -I$(IDIR)
+CXX := gcc
+FLAGS := -std=c11 -g -Ofast
+GLIB := `pkg-config --cflags --libs glib-2.0`
+INCD := -I ../include
 
-DEPS=$(IDIR)/$(wildcard *.h)
-SOURCES=$(wildcard *.c)
-MY_LIBS=$(wildcard $(LDIR)/*.c)
-SOURCES_OBJ=$(patsubst %.c,$(ODIR)/%.o,$(SOURCES))
-MY_LIBS_OBJ=$(foreach o, $(patsubst %.c,%.o,$(MY_LIBS)), $(ODIR)/$o)
-LIBS = `pkg-config --libs glib-2.0` 
-
-print-% : ; @echo $* = $($*)
-
-$(ODIR)/%.o : %.c $(DEPS)
-	$(CC) $(CFLAGS) -c -o $@ $<
-
-program: $(SOURCES_OBJ) $(MY_LIBS_OBJ)
-	$(CC) $(CFLAGS) $(wildcard $(ODIR)/*.o)  $(wildcard $(OLDIR)/*.o) -o transformer $(LIBS)
+all:
+	@flex exercicio2.l
+	$(CXX) -o $(EXEC) Angola.c lex.yy.c $(FLAGS) $(GLIB) $(INCD)
 
 clean:
-	rm obj/*.o
-	rm obj/lib/*.o
-	rm program
+	rm -rf lex.yy.c $(EXEC)
