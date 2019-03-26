@@ -15,7 +15,7 @@ void addAuthor(Angola a, char* str);
 void addTag(Angola a, char* str);
 void addTitle(Angola a, char* str);
 void addCategory(Angola a, char* str);
-void addLine(Angola a, char *str);
+void addLine(Angola a, char* str);
 
 void tag();
 void trace();

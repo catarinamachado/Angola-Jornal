@@ -89,8 +89,6 @@ void printHTML(Angola a){
 
     printf("<pub id=\"%s\">\n", id);
 
-    printf("<!DOCTYPE html>\n");
-    printf("<html>\n");
     printf("<head>\n");
 
     if (strstr(title, "---------"))
@@ -126,9 +124,7 @@ void printHTML(Angola a){
 
     printf("<text>\n");
 
-    printf("<div style='float: left; width: 50");
-    printf("%");
-    printf(";'>\n");
+    printf("<div style='float: left; width: 50%%;'>\n");
     printf("<div style='padding: 20px'>\n");
     guint length = g_list_length(a->lines);
     int i = 0;
@@ -143,9 +139,7 @@ void printHTML(Angola a){
             printf("</div>");
             printf("</div>\n");
 
-            printf("<div style='float: left; width: 49");
-            printf("%");
-            printf(";'>\n");
+            printf("<div style='float: left; width: 49%%;'>\n");
             printf("<div style='padding: 20px'>\n");
         }
 
@@ -158,10 +152,9 @@ void printHTML(Angola a){
 
     printf("</text>\n");
 
-    printf("</pub>\n");
-
     printf("</body>\n");
-    printf("</html>");
+
+    printf("</pub>\n");
 }
 
 void addId(Angola a, char* str){
@@ -215,28 +208,68 @@ void title_index_function(gpointer key, gpointer value, gpointer user_data){
     printf("</pub>\n");
 }
 
-void tag_index_function(gpointer key, gpointer value, gpointer user_data){
-    GString* s = (GString*)key;
-    char buffer[2000];
-    char *ptr;
-
-    strcpy(buffer,s->str);
-    for(ptr = buffer;*ptr != '\0'; ptr++ )
-        if( *ptr == ' ' )
-            *ptr = '-';
-
-    printf("\t\t<a href=\"%s.html\">%s</a>\n",buffer,s->str);
-}
-
 
 void trace(){
-
     printf("<pub id=\"tags\">\n");
-    g_hash_table_foreach(taghtable,tag_index_function,NULL);
+    printf("<head>\n");
+    printf("<title>Tags</title>\n");
+    printf("</head>\n");
+    printf("<body>\n");
+
+    printf("<h1><p align='center'><font color='#2874A6'>Tags</font></p></h1>\n");
+
+    printf("<div style='float: left; width: 33%%;'>\n");
+
+    printf("<ul>");
+
+    guint length = g_hash_table_size(taghtable);
+    int i = 0;
+
+    GHashTableIter iter;
+    gpointer key, value;
+
+    g_hash_table_iter_init(&iter, taghtable);
+    while (g_hash_table_iter_next(&iter, &key, &value)){
+        if(i == length/3){
+            printf("</ul>");
+            printf("</div>");
+            printf("<div style='float: left; width: 33%%;'>");
+            printf("<ul>");
+        }
+        if (i == ((2*length)/3)){
+            printf("</ul>");
+            printf("</div>");
+            printf("<div style='float: right; width: 33%%;'>");
+            printf("<ul>");
+        }
+
+        GString *s = (GString *)key;
+        char buffer[2000];
+        char *ptr;
+
+        strcpy(buffer, s->str);
+        for (ptr = buffer; *ptr != '\0'; ptr++)
+        {
+            if (*ptr == ' ')
+                *ptr = '-';
+        }
+
+        GList *l = g_hash_table_get_values((GHashTable *)value);
+
+        printf("\t\t<li><a href=\"%s.html\">%s</a> <font color='#2874A6'>(%d)</font></li>\n", buffer, s->str, (int)g_list_length(l));
+
+        i++;
+    }
+
+    printf("</body>\n");
     printf("</pub>\n");
 
+
+
+
+
+//
     g_hash_table_foreach(taghtable,title_index_function,NULL);
 
     g_hash_table_destroy(taghtable);
-
 }

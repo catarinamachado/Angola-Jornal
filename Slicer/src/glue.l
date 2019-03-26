@@ -24,10 +24,10 @@ dig [0-9]
 <NAME>\">                               {strcat(buffer,".html");
                                          sprintf(dir,"%s%s",dirout,buffer);
                                          fdes = fopen(dir,"w");
-                                         fprintf(fdes,"<html>\n");
+                                         fprintf(fdes,"<!DOCTYPE html>\n<html>\n");
                                          BEGIN COPY;}
 <NAME>.                                 {strcat(buffer,yytext);}
-<COPY>"</pub>"                          {fprintf(fdes,"</html>");
+<COPY>"</pub>"                          {fprintf(fdes,"\n</html>");
                                          fclose(fdes);
                                          BEGIN INITIAL;}
 <COPY>.|\n                              {putc(yytext[0] ,fdes);}
