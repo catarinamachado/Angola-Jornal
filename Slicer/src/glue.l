@@ -20,11 +20,11 @@ dig [0-9]
 
 %%
 "<pub id=\""                            {buffer[0]=dir[0]='\0';
-                                         BEGIN NAME;}                
+                                         BEGIN NAME;}
 <NAME>\">                               {strcat(buffer,".html");
                                          sprintf(dir,"%s%s",dirout,buffer);
-                                         fdes = fopen(dir,"w"); 
-                                         fprintf(fdes,"<html>\n"); 
+                                         fdes = fopen(dir,"w");
+                                         fprintf(fdes,"<html>\n");
                                          BEGIN COPY;}
 <NAME>.                                 {strcat(buffer,yytext);}
 <COPY>"</pub>"                          {fprintf(fdes,"</html>");
