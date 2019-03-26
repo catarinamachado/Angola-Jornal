@@ -198,28 +198,48 @@ void title_index_function(gpointer key, gpointer value, gpointer user_data){
         if( *ptr == ' ' )
             *ptr = '-';
 
-    printf("<pub id=\"%s\">\n",buffer);
-    printf("\t<h1>%d</h1>\n",(int)g_list_length(l));
+    printf("<pub id=\"%s\">\n", buffer);
+
+    printf("<head>\n");
+    printf("<title>%s</title>\n", buffer);
+    printf("</head>\n");
+
+    printf("<body>\n");
+
+    printf("<h1><p align='center'><font color='#2874A6'>%s</font></p></h1>\n", buffer);
+
+    printf("<h2>Número de ocorrências: <font color='#2874A6'>%d</font></h2>\n", (int)g_list_length(l));
+
+    printf("<ul>");
+
     for(cur = l; cur; cur = cur->next){
         tmp = (Tuple)cur->data;
 
-        printf("\t\t<a href=\"%s.html\">%s</a>\n",tmp->id->str,tmp->title->str);
+        printf("\t\t<li><a href=\"%s.html\">%s</a></li>\n",tmp->id->str,tmp->title->str);
     }
+
+    printf("</ul>");
+
+    printf("</body>\n");
     printf("</pub>\n");
+}
+
+void printTagTitlesHTML(){
+    g_hash_table_foreach(taghtable, title_index_function, NULL);
 }
 
 void printTagsHTML(){
     printf("<pub id=\"tags\">\n");
+
     printf("<head>\n");
     printf("<title>Tags</title>\n");
     printf("</head>\n");
-    printf("<body>\n");
 
+    printf("<body>\n");
     printf("<h1><p align='center'><font color='#2874A6'>Tags</font></p></h1>\n");
 
     printf("<div style='float: left; width: 33%%;'>\n");
-
-    printf("<ul>");
+    printf("<ul>\n");
 
     guint length = g_hash_table_size(taghtable);
     int i = 0;
@@ -228,21 +248,18 @@ void printTagsHTML(){
     gpointer key, value;
 
     g_hash_table_iter_init(&iter, taghtable);
-    while (g_hash_table_iter_next(&iter, &key, &value))
-    {
-        if (i == length / 3)
-        {
-            printf("</ul>");
-            printf("</div>");
-            printf("<div style='float: left; width: 33%%;'>");
-            printf("<ul>");
+    while (g_hash_table_iter_next(&iter, &key, &value)){
+        if (i == length / 3){
+            printf("</ul>\n");
+            printf("</div>\n");
+            printf("<div style='float: left; width: 33%%;'>\n");
+            printf("<ul>\n");
         }
-        if (i == ((2 * length) / 3))
-        {
-            printf("</ul>");
-            printf("</div>");
-            printf("<div style='float: right; width: 33%%;'>");
-            printf("<ul>");
+        if (i == ((2 * length) / 3)){
+            printf("</ul>\n");
+            printf("</div>\n");
+            printf("<div style='float: right; width: 33%%;'>\n");
+            printf("<ul>\n");
         }
 
         GString *s = (GString *)key;
@@ -250,8 +267,7 @@ void printTagsHTML(){
         char *ptr;
 
         strcpy(buffer, s->str);
-        for (ptr = buffer; *ptr != '\0'; ptr++)
-        {
+        for (ptr = buffer; *ptr != '\0'; ptr++){
             if (*ptr == ' ')
                 *ptr = '-';
         }
@@ -267,10 +283,11 @@ void printTagsHTML(){
     printf("</pub>\n");
 }
 
+
 void trace(){
     printTagsHTML();
 
-    g_hash_table_foreach(taghtable, title_index_function, NULL);
+    printTagTitlesHTML();
 
     g_hash_table_destroy(taghtable);
 }
