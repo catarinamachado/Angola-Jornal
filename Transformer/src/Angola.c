@@ -82,6 +82,8 @@ void unmkAngola(Angola a){
 void printHTML(Angola a){
     GList *l;
     char *tmp;
+    char tmpOriginal[2000];
+    char *ptr;
     char *id = a->id->str;
     char *author = a->author->str;
     char *title = a->title->str;
@@ -109,11 +111,19 @@ void printHTML(Angola a){
     printf("\t<author_date><h3><font color='#85C1E9'>%s</font></h3></author_date>\n", author);
 
     printf("\t<p><tags><b>Tags:</b> \n");
-    for (l = a->tags; l != NULL; l = l->next)
-    {
+    for (l = a->tags; l != NULL; l = l->next){
         addlink(l->data, a->id, a->title);
+
         tmp = g_string_free(l->data, FALSE);
-        printf("\t<tag>#%s</tag>", tmp);
+        strcpy(tmpOriginal, tmp);
+
+        for (ptr = tmp; *ptr != '\0'; ptr++){
+            if (*ptr == ' ')
+                *ptr = '-';
+        }
+
+        printf("\t<a href=\"%s.html\"><tag>#%s</tag></a>", tmp, tmpOriginal);
+
         g_free(tmp);
     }
     printf("\t</tags></p>\n");
@@ -191,8 +201,10 @@ void title_index_function(gpointer key, gpointer value, gpointer user_data){
     GList* cur;
     Tuple tmp;
     char buffer[2000];
+    char bufferOriginal[2000];
     char *ptr;
 
+    strcpy(bufferOriginal,s->str);
     strcpy(buffer,s->str);
     for(ptr = buffer;*ptr != '\0'; ptr++ )
         if( *ptr == ' ' )
@@ -201,12 +213,12 @@ void title_index_function(gpointer key, gpointer value, gpointer user_data){
     printf("<pub id=\"%s\">\n", buffer);
 
     printf("<head>\n");
-    printf("\t<title>%s</title>\n", buffer);
+    printf("\t<title>%s</title>\n", bufferOriginal);
     printf("</head>\n");
 
     printf("<body>\n");
 
-    printf("\t<h1><p align='center'><font color='#2874A6'>%s</font></p></h1>\n", buffer);
+    printf("\t<h1><p align='center'><font color='#2874A6'>%s</font></p></h1>\n", bufferOriginal);
 
     printf("\t<h2>Número de ocorrências: <font color='#2874A6'>%d</font></h2>\n", (int)g_list_length(l));
 
