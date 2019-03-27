@@ -144,8 +144,8 @@ void printHTML(Angola a){
         tmp = g_string_free(l->data, FALSE);
         printf("<p align='justify'>%s</p>\n", tmp);
 
-        if (i == length / 2)
-        {
+        if (i == length / 2){
+            printf("\t<br><br><a href=\"tags.html\"><tag>Regressar para Tags.html</tag></a>\n");
             printf("\t</div>");
             printf("\t</div>\n");
 
@@ -232,7 +232,10 @@ void title_index_function(gpointer key, gpointer value, gpointer user_data){
 
     printf("</ul>\n");
 
+    printf("\t<br><br><br><br><br><br><br><a href=\"tags.html\"><tag>Regressar para Tags.html</tag></a>");
+
     printf("</body>\n");
+
     printf("</pub>\n");
 }
 
