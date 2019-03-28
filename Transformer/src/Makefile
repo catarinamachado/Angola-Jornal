@@ -6,7 +6,7 @@ GLIB := `pkg-config --cflags --libs glib-2.0`
 INCD := -I ../include
 
 all:
-	@flex exercicio2.l
+	@flex transformer.l
 	$(CXX) -o $(EXEC) Angola.c lex.yy.c $(FLAGS) $(GLIB) $(INCD)
 
 clean:
