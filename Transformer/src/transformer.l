@@ -38,7 +38,6 @@ tag:\{              {tbuffer = g_string_new("");BEGIN TAG;}
 <UDATE>.            {g_string_append_c(tbuffer,yytext[0]);}
 <UDATE>\n           {tmp = g_string_free(tbuffer,FALSE); addAuthor(a,tmp); g_free(tmp); BEGIN TEXT; tbuffer = g_string_new("");}
 
-
 <TEXT>.             {g_string_append_c(tbuffer,yytext[0]);}
 <TEXT>\n            {}
 <TEXT>\n\n          {tmp = g_string_free(tbuffer,FALSE); addLine(a,tmp); g_free(tmp); BEGIN TEXT; tbuffer = g_string_new("");}
