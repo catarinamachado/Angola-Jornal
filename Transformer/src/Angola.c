@@ -265,16 +265,16 @@ void printTagsHTML(){
     g_hash_table_iter_init(&iter, taghtable);
     while (g_hash_table_iter_next(&iter, &key, &value)){
         if (i == length / 3){
-            printf("</ul>\n");
-            printf("</div>\n");
-            printf("<div style='float: left; width: 33%%;'>\n");
-            printf("<ul>\n");
+            printf("\t</ul>\n");
+            printf("\t</div>\n");
+            printf("\t<div style='float: left; width: 33%%;'>\n");
+            printf("\t<ul>\n");
         }
         if (i == ((2 * length) / 3)){
-            printf("</ul>\n");
-            printf("</div>\n");
-            printf("<div style='float: right; width: 33%%;'>\n");
-            printf("<ul>\n");
+            printf("\t</ul>\n");
+            printf("\t</div>\n");
+            printf("\t<div style='float: right; width: 33%%;'>\n");
+            printf("\t<ul>\n");
         }
 
         GString *s = (GString *)key;
@@ -289,7 +289,7 @@ void printTagsHTML(){
 
         GList *l = g_hash_table_get_values((GHashTable *)value);
 
-        printf("\t\t<li><a href=\"%s.html\">%s</a> <font color='#2874A6'>(%d)</font></li>\n", buffer, s->str, (int)g_list_length(l));
+        printf("\t\t<li><a href=\"%s.html\">%s</a><font color='#2874A6'>(%d)</font></li>\n", buffer, s->str, (int)g_list_length(l));
 
         i++;
     }

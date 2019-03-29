@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <glib.h>
 #include <Angola.h>
+
 GString * tbuffer;
 Angola a;
 char *tmp;
