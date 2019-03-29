@@ -105,10 +105,10 @@ void printHTML(Angola a){
     printf("</head>\n");
     printf("<body>\n");
 
-    printf("\t<h1><p align='center'><font color='#2874A6'>%s</font></p></h1>\n", title);
+    printf("\t<h1><p align='center'>\n\t\t<font color='#2874A6'>%s</font>\n\t</p></h1>\n", title);
 
     printf("\t<div style='padding: 20px'>\n");
-    printf("\t<author_date><h3><font color='#85C1E9'>%s</font></h3></author_date>\n", author);
+    printf("\t<author_date><h3>\n\t\t<font color='#85C1E9'>%s</font>\n\t</h3></author_date>\n", author);
 
     printf("\t<p><tags><b>Tags:</b> \n");
     for (l = a->tags; l != NULL; l = l->next){
@@ -122,7 +122,7 @@ void printHTML(Angola a){
                 *ptr = '-';
         }
 
-        printf("\t<a href=\"%s.html\"><tag>#%s</tag></a>", tmp, tmpOriginal);
+        printf("\t\t<a href=\"%s.html\"><tag>#%s</tag></a>\n", tmp, tmpOriginal);
 
         g_free(tmp);
     }
@@ -142,12 +142,12 @@ void printHTML(Angola a){
     for (l = a->lines; l != NULL; l = l->next)
     {
         tmp = g_string_free(l->data, FALSE);
-        printf("<p align='justify'>%s</p>\n", tmp);
+        printf("\t\t<p align='justify'>%s</p>\n", tmp);
 
         if (i == length / 2){
-            printf("\t<br><br><a href=\"tags.html\"><tag>Regressar para Tags.html</tag></a>\n");
+            printf("\t<br><br>\n\t<a href=\"tags.html\"><tag>Regressar para Tags.html</tag></a>\n");
             printf("\t</div>");
-            printf("\t</div>\n");
+            printf("</div>\n");
 
             printf("\t<div style='float: left; width: 49%%;'>\n");
             printf("\t<div style='padding: 20px'>\n");
@@ -158,7 +158,7 @@ void printHTML(Angola a){
     }
 
     printf("\t</div>");
-    printf("\t</div>\n");
+    printf("</div>\n");
 
     printf("\t</text>\n");
 

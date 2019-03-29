@@ -33,7 +33,6 @@ tag:\{              {tbuffer = g_string_new("");BEGIN TAG;}
 <TITLE>\n           {tmp = g_string_free(tbuffer,FALSE); addTitle(a,tmp); g_free(tmp); BEGIN INITIAL;}
 
 \#DATE\:            {BEGIN UDATE;tbuffer = g_string_new("");}
-
 <UDATE>" "\[.*\]" " {}
 <UDATE>.            {g_string_append_c(tbuffer,yytext[0]);}
 <UDATE>\n           {tmp = g_string_free(tbuffer,FALSE); addAuthor(a,tmp); g_free(tmp); BEGIN TEXT; tbuffer = g_string_new("");}
