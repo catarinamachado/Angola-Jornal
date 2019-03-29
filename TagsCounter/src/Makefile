@@ -1,11 +1,27 @@
-EXEC := slicer
+IDIR=../include
+ODIR=obj
+LDIR=lib
+OLDIR=$(ODIR)/lib
 
-CXX := gcc
-FLAGS := -Wall -std=c11 -g -Ofast
+CC=gcc
+CFLAGS = -Wall -std=c11 -g -Ofast `pkg-config --cflags glib-2.0` -I$(IDIR)
 
-all:
-	@flex glue.l
-	$(CXX) -o $(EXEC) lex.yy.c $(FLAGS)
+DEPS=$(IDIR)/$(wildcard *.h)
+SOURCES=$(wildcard *.c)
+MY_LIBS=$(wildcard $(LDIR)/*.c)
+SOURCES_OBJ=$(patsubst %.c,$(ODIR)/%.o,$(SOURCES))
+MY_LIBS_OBJ=$(foreach o, $(patsubst %.c,%.o,$(MY_LIBS)), $(ODIR)/$o)
+LIBS = `pkg-config --libs glib-2.0`
+
+print-% : ; @echo $* = $($*)
+
+$(ODIR)/%.o : %.c $(DEPS)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+program: $(SOURCES_OBJ) $(MY_LIBS_OBJ)
+	$(CC) $(CFLAGS) $(wildcard $(ODIR)/*.o)  $(wildcard $(OLDIR)/*.o) -o count_tag $(LIBS)
 
 clean:
-	rm -rf lex.yy.c $(EXEC)
+	rm obj/*.o
+	rm obj/lib/*.o
+	rm program

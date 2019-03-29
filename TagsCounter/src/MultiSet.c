@@ -13,13 +13,13 @@ typedef struct tup{
 }*Tuple;
 
 Tuple mkTuple(Value v){
-    Tuple t = (Tuple)g_malloc( sizeof(struct tup) );
+    Tuple t = (Tuple)g_malloc(sizeof(struct tup));
     t->n = 1;
     t->value = v;
     return t;
 }
 
-int tuplecmp( gpointer a1 ,gpointer a2){
+int tuplecmp(gpointer a1 ,gpointer a2){
     Tuple b1 = (Tuple)a1;
     Tuple b2 = (Tuple)a2;
 
@@ -34,7 +34,7 @@ void unmkTuple_wraper(gpointer t){
    unmkTuple((Tuple)t);
 }
 
-MultiSet new( MemorySize fsize, FreeFunc ffunc ){
+MultiSet new(MemorySize fsize, FreeFunc ffunc){
     MultiSet t = (MultiSet)g_malloc( sizeof(struct mset) );
     t->htable = g_hash_table_new_full(g_str_hash, g_str_equal, ffunc, unmkTuple_wraper);
     t->fsize = fsize;
@@ -48,7 +48,7 @@ void destroy(MultiSet mset){
 
 MultiSet add(MultiSet set,Value element){
 
-    if( g_hash_table_contains(set->htable,element) ){
+    if(g_hash_table_contains(set->htable,element)){
         Tuple t = (Tuple)g_hash_table_lookup(set->htable,element);
         t->n++;
     }else{
@@ -61,7 +61,6 @@ MultiSet add(MultiSet set,Value element){
 }
 
 void show(MultiSet set){
-    //GHashTableIter iter;
     Tuple t;
     GList *cur;
     GList *l = g_hash_table_get_values(set->htable);
@@ -70,11 +69,10 @@ void show(MultiSet set){
     for(cur = l; cur ; cur = cur->next)
         t = (Tuple)cur->data;
         printf(" %s - %ld \n",t->value, t->n);
-
 }
 
 long count(MultiSet set, Value element){
-    if( g_hash_table_contains(set->htable,element) ){
+    if(g_hash_table_contains(set->htable,element)){
         Tuple t = g_hash_table_lookup(set->htable,element);
         return t->n;
     }else{
