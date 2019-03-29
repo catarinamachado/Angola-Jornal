@@ -1,6 +1,8 @@
 EXEC := go
 DIROUT := out
 
+.PHONY: all slicer transformer exec clean cleanSlicer cleanTransformer cleanExec
+
 all: slicer transformer exec
 
 slicer:
