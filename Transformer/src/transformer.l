@@ -18,6 +18,10 @@ dig [0-9]
 \<pub\>             {a = mkAngola();}
 \<\/pub\>           {printHTML(a); unmkAngola(a);}
 
+tag:\{              {tbuffer = g_string_new("");BEGIN TAG;}
+<TAG>\}             {tmp = g_string_free(tbuffer,FALSE); addTag(a,tmp); g_free(tmp); BEGIN INITIAL;}
+<TAG>\/             {g_string_append_c(tbuffer,'-');}
+<TAG>.              {g_string_append_c(tbuffer,yytext[0]);}
 tag:\{[^\}]+/\}     {addTag(a,&yytext[5]);}
 
 \#ID                {tbuffer = g_string_new("post-");BEGIN IDT;}
