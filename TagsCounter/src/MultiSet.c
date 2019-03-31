@@ -19,7 +19,7 @@ Tuple mkTuple(Value v){
     return t;
 }
 
-int tuplecmp(gpointer a1 ,gpointer a2){
+int tuplecmp(const void* a1 ,const void* a2){
     Tuple b1 = (Tuple)a1;
     Tuple b2 = (Tuple)a2;
 
@@ -66,9 +66,10 @@ void show(MultiSet set){
     GList *l = g_hash_table_get_values(set->htable);
     l = g_list_sort(l,tuplecmp);
 
-    for(cur = l; cur ; cur = cur->next)
+    for(cur = l; cur ; cur = cur->next){
         t = (Tuple)cur->data;
         printf(" %s - %ld \n",t->value, t->n);
+    }
 }
 
 long count(MultiSet set, Value element){
