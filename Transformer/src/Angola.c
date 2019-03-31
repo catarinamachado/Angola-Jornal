@@ -289,7 +289,7 @@ void printTagsHTML(){
 
         GList *l = g_hash_table_get_values((GHashTable *)value);
 
-        printf("\t\t<li><a href=\"%s.html\">%s</a><font color='#2874A6'>(%d)</font></li>\n", buffer, s->str, (int)g_list_length(l));
+        printf("\t\t<li><a href=\"%s.html\">%s</a><font color='#2874A6'> (%d)</font></li>\n", buffer, s->str, (int)g_list_length(l));
 
         i++;
     }

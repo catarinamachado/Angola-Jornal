@@ -13,7 +13,7 @@ char* tmp;
 
 tag:\{              {tbuffer = g_string_new("");BEGIN TAG;}
 <TAG>\}             {tmp = g_string_free(tbuffer,FALSE); add(mset,tmp); g_free(tmp); BEGIN INITIAL;}
-<TAG>\/             {g_string_append_c(tbuffer,'-');}
+<TAG>\/             {g_string_append_c(tbuffer,'^');}
 <TAG>.              {g_string_append_c(tbuffer,yytext[0]);}
 
 <*>.|\n         {}
