@@ -12,7 +12,7 @@ transformer:
 	@cd Transformer/src && $(MAKE)
 
 exec:
-	@echo "cat folha8.OUT.txt | ./Transformer/src/transformer | ./Slicer/src/slicer $(DIROUT)" > $(EXEC)
+	@echo " ./Transformer/src/transformer | ./Slicer/src/slicer $(DIROUT)" > $(EXEC)
 	@chmod +x $(EXEC)
 
 
