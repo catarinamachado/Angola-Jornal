@@ -4,8 +4,8 @@
 
 Project using Flex to convert “Jornal Angolano - Folha 8, v2” articles to HTML files.
 
-Check the project statement [here](https://github.com/Goncalo-Faria/Angola-Jornal/blob/master/pl18-tp1.pdf) and
-the final report [here](https://github.com/Goncalo-Faria/Angola-Jornal/blob/master/Relatorio_TP1.pdf).
+Check the project statement [here](https://github.com/catarinamachado/Angola-Jornal/blob/master/pl18-tp1.pdf) and
+the final report [here](https://github.com/catarinamachado/Angola-Jornal/blob/master/Relatorio_TP1.pdf).
 
 ## Usage
 
